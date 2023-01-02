@@ -4,12 +4,6 @@ import tkinter.ttk as ttk
 
 import sqlite3
 
-
-
-
-
-
-
 #Connects to the database
 conn = sqlite3.connect('books.db')
 cursor = conn.cursor()
@@ -17,7 +11,7 @@ cursor = conn.cursor()
 #Creates the books table if it doesn't already exist
 cursor.execute('''CREATE TABLE IF NOT EXISTS books (title text, author text, status text)''')
 
-#Creates the main window
+#Creates the main windowa
 root = tk.Tk()
 root.title("Book Manager")
 root.config(bg='#E0E0EE')
@@ -82,27 +76,28 @@ def sort_by_status():
         book_list.insert(tk.END, f"{book[0]} | {book[1]} | {book[2]}")
 
 
-def edit_book(event):
-    #gets the selected book from the listbox
+def edit_book():
+    # gets the selected book from the listbox
     selection = book_list.curselection()
     book = book_list.get(selection[0])
     title, author, status = book.split(" | ")
 
-    #sets the entry fields to the selected book's values
+    # sets the entry fields to the selected book's values
     title_entry.delete(0, tk.END)
     title_entry.insert(0, title)
     author_entry.delete(0, tk.END)
     author_entry.insert(0, author)
     status_entry.delete(0, tk.END)
-    status_entry.insert(0, status)  #sets the value of the status field in the Combobox widget
+    status_entry.insert(0, status)  # sets the value of the status field in the Combobox widget
 
-    #changes the "Add Book" button to "Update Book"
+    # changes the "Add Book" button to "Update Book"
     add_button.config(text='Update Book', command=lambda: update_book(title, author, status))
 
-    #creates the "cancel button" (shouldnt really use global because it can mess with other stuff but it works fine for this, because its super light weight)
+    # creates the "cancel button" (shouldnt really use global because it can mess with other stuff but it works fine for this, because its super light weight)
     global cancel_button
-    cancel_button = tk.Button(root, text='Cancel', command=cancel_update, font=('Georgia', 14), bg='orange')
-    cancel_button.grid(row=4, column=4, padx=3, pady=5)  #  Specify the parent widget and the position in the grid
+    cancel_button = ttk.Button(root, text='Cancel', command=cancel_update)
+    cancel_button.pack(side=tk.BOTTOM)
+
 
 
 def cancel_update():
