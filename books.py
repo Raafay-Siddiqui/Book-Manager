@@ -2,9 +2,12 @@ import tkinter as tk
 
 import tkinter.ttk as ttk
 
+import tkinter.messagebox
+
 import sqlite3
 
-import tkinter.messagebox
+import string
+
 
 #above just imports all the codebases 
 
@@ -22,9 +25,14 @@ root.config(bg='#E0E0EE')
 root.geometry("600x450")
 
 #defines the book adder and gets the values from the entry fields
+
+
 def add_book():
     title = title_entry.get()
+    title = string.capwords(title)  #capitalizes the first letter of each word in the title
     author = author_entry.get()
+
+    author = string.capwords(author)  #capitalizes the first letter of each word in the author
     status = status_entry.get()  #gets the value of the status field from the Combobox widget
     
     if title == "" or author == "":
@@ -49,9 +57,13 @@ def display_books():
     cursor.execute('''SELECT title, author, status FROM books''')
     books = cursor.fetchall()
 
+    #sorts the list of books by status
+    books.sort(key=lambda book: book[2])
+
     #inserts the rows into the listbox
     for book in books:
         book_list.insert(tk.END, f"{book[0]} | {book[1]} | {book[2]}")
+
 
 def delete_book():
     selection = book_list.curselection()  #gets the selected item in the listbox
@@ -69,6 +81,27 @@ def delete_book():
     #updates the listbox
     display_books()
 
+
+def show_all_books():
+    #clears the listbox
+    book_list.delete(0, tk.END)
+
+    #retrieves all rows from the books table, sorted alphabetically by title
+    cursor.execute('''SELECT title, author, status FROM books ORDER BY title ASC''')
+    books = cursor.fetchall()
+
+    #inserts the rows into the listbox
+    for book in books:
+        book_list.insert(tk.END, f"{book[0]} | {book[1]} | {book[2]}")
+
+#creates the "Show All Books" button
+show_all_button = tk.Button(root, text="Show All Books", command=show_all_books)
+
+#add the button to the window
+show_all_button.grid(row=0, column=6)
+show_all_button.config(bg='#FFA500')
+
+
 def sort_by_status():
     #this basically looks at the status that its on and shows that in the listbox
     status = status_entry.get()
@@ -80,7 +113,7 @@ def sort_by_status():
     cursor.execute('''SELECT title, author, status FROM books WHERE status=?''', (status,))
     books = cursor.fetchall()
 
-    #Inserts the rows into the listbox
+    #inserts the rows into the listbox
     for book in books:
         book_list.insert(tk.END, f"{book[0]} | {book[1]} | {book[2]}")
 
@@ -126,7 +159,7 @@ def update_book(title, author, status):
     #gets the new values from the entry fields
     updated_title = title_entry.get()
     updated_author = author_entry.get()
-    updated_status = status_entry.get()  #Get the new value of the status field from the Combobox widget
+    updated_status = status_entry.get()  #gets the new value of the status field from the Combobox widget
 
     #updates the book in the database
     cursor.execute('''UPDATE books SET title=?, author=?, status=? WHERE title=? AND author=? AND status=?''',
@@ -183,7 +216,7 @@ sort_button = tk.Button(root, text='Sort By Status', command=sort_by_status, fon
 sort_button.grid(row=2, column=4)
 
 #creates the listbox
-book_list = tk.Listbox(root, height=9, width=40, font=('Georgia', 14))
+book_list = tk.Listbox(root, height=12, width=40, font=('Georgia', 14))
 book_list.grid(row=3, column=0, columnspan=5)
 
 #binds the double-click event to the edit_book function
