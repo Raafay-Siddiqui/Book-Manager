@@ -1,0 +1,32 @@
+
+So to use the program its incredibly simple and intuitive. 
+
+To begin decide on if you want to use the .exe or the .py
+
+For the exe, 
+1) download it to your computer
+
+1.5) make sure you have python installed on your computer. 
+If you're on a windows computer you can go to the microsoft store
+and download it there. 
+Or you can go on https://www.python.org/downloads/ and download it there
+
+2) move it to a folder or create a new folder.
+
+3) double click to open.
+
+4) to use fill out the required fields and click "Add Book".
+
+5) you can sort the books by clicking on status button and then putting it on which mode(s) you want.
+then click on "Sort By Status" and it will show you which books you have read, not read, or are reading.
+
+
+
+
+For the .py,
+
+1) follow step 1-2 thats used in exe (download .py from github, install python if its not installed)
+
+2) open it how you would open up .py files regularly, you can use vs code and press f5 to launch it, or just save it as a .py file and double click.
+
+3) view step 4/5 in exe to use <3
