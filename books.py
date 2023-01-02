@@ -1,17 +1,10 @@
-try:
-    import tkinter as tk
-except ImportError:
-    print("The tkinter module is not installed. Please install it and try again.")
+import tkinter as tk
 
-try:
-    import tkinter.ttk as ttk
-except ImportError:
-    print("The tkinter.ttk module is not installed. Please install it and try again.")
+import tkinter.ttk as ttk
 
-try:
-    import sqlite3
-except ImportError:
-    print("The sqlite3 module is not installed. Please install it and try again.")
+import sqlite3
+
+
 
 
 
