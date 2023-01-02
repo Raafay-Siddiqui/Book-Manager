@@ -20,3 +20,17 @@ Or you can go on https://www.python.org/downloads/ and download it there
 then click on "Sort By Status" and it will show you which books you have read, not read, or are reading.
 
 
+*so if you double-click the file and it just opens and closes the way to fix it is just to do these thing(s):
+
+make a text file in the same folder with the books.py file.
+
+in the  text file put this:
+
+python "C:\Users\name\Desktop\Books\books.py"
+
+
+put the route to the file in that section above^
+
+so once you've made save it as a bat file.
+e.g. books.bat and make sure its set to all files 
+
