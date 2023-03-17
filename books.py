@@ -1,15 +1,9 @@
 import tkinter as tk
-
 import tkinter.ttk as ttk
-
 import sqlite3
-
 import tkinter.messagebox
-
 import string
-
 import time
-
 import math
 
 #above just imports all the codebases 
