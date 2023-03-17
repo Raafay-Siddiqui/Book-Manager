@@ -2,12 +2,15 @@ import tkinter as tk
 
 import tkinter.ttk as ttk
 
-import tkinter.messagebox
-
 import sqlite3
+
+import tkinter.messagebox
 
 import string
 
+import time
+
+import math
 
 #above just imports all the codebases 
 
@@ -26,7 +29,6 @@ root.geometry("600x450")
 
 #defines the book adder and gets the values from the entry fields
 
-
 def add_book():
     title = title_entry.get()
     title = string.capwords(title)  #capitalizes the first letter of each word in the title
@@ -40,7 +42,7 @@ def add_book():
     else:
         #inserts the values into the books table
         cursor.execute('''INSERT INTO books VALUES (?,?,?)''', (title, author, status))
-        conn.commit()
+        conn.commit()\
         
         #clears the entry fields
         title_entry.delete(0, tk.END)
@@ -200,7 +202,7 @@ status_label.config(bg='#E0E0EE')
 status_label.grid(row=2, column=0, sticky='W')
 
 #creates the combobox dropdown for the status field
-status_entry = ttk.Combobox(root, font=('Georgia', 14), values=['Read', 'Reading', 'Not Read'])
+status_entry = ttk.Combobox(root, font=('Georgia', 14), values=['Read','Actively Reading', 'Reading',  'Not Read'])
 status_entry.grid(row=2, column=1, columnspan=3)
 
 #creates the "add book" button
