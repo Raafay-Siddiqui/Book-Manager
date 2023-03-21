@@ -19,7 +19,7 @@ cursor.execute('''CREATE TABLE IF NOT EXISTS books (title text, author text, sta
 root = tk.Tk()
 root.title("Book Manager")
 root.config(bg='#E0E0EE')
-root.geometry("600x450")
+root.geometry("900x500")
 
 #defines the book adder and gets the values from the entry fields
 
@@ -44,21 +44,47 @@ def add_book():
         status_entry.delete(0, tk.END)  #clears the Combobox widget
 
 
-#defines and displays the books
 def display_books():
-    #clears the listbox
+    # clears the listbox
     book_list.delete(0, tk.END)
 
-    #retrieves all rows from the books table
+    # retrieves all rows from the books table
     cursor.execute('''SELECT title, author, status FROM books''')
     books = cursor.fetchall()
 
-    #sorts the list of books by status
+    # sorts the list of books by status
     books.sort(key=lambda book: book[2])
 
-    #inserts the rows into the listbox
+    # inserts the rows into the listbox
     for book in books:
-        book_list.insert(tk.END, f"{book[0]} | {book[1]} | {book[2]}")
+        if book[2] == 'Read':
+            color = 'green'
+        elif book[2] == 'Actively Reading':
+            color = 'orange'
+        elif book[2] == 'Reading':
+            color = 'blue'
+        else:
+            color = 'red'
+
+        # combine the title, author and status strings with the separators
+        book_info = f"{book[0]} | {book[1]} | {book[2]}"
+
+        # insert the combined string with the corresponding color
+        book_list.insert(tk.END, book_info)
+
+    # update the color of each item in the listbox based on its status
+    for i in range(book_list.size()):
+        item = book_list.get(i)
+        title, author, status = item.split(' | ')
+        if status == 'Read':
+            color = 'green'
+        elif status == 'Actively Reading':
+            color = 'orange'
+        elif status == 'Reading':
+            color = 'blue'
+        else:
+            color = 'red'
+        book_list.itemconfigure(i, fg=color)
 
 
 def delete_book():
@@ -79,16 +105,31 @@ def delete_book():
 
 
 def show_all_books():
-    #clears the listbox
+    # clears the listbox
     book_list.delete(0, tk.END)
 
-    #retrieves all rows from the books table, sorted alphabetically by title
+    # retrieves all rows from the books table, sorted alphabetically by title
     cursor.execute('''SELECT title, author, status FROM books ORDER BY title ASC''')
     books = cursor.fetchall()
 
-    #inserts the rows into the listbox
+    # inserts the rows into the listbox with the corresponding color
     for book in books:
-        book_list.insert(tk.END, f"{book[0]} | {book[1]} | {book[2]}")
+        if book[2] == 'Read':
+            color = 'green'
+        elif book[2] == 'Actively Reading':
+            color = 'orange'
+        elif book[2] == 'Reading':
+            color = 'blue'
+        else:
+            color = 'red'
+
+        # combine the title, author and status strings with the separators
+        book_info = f"{book[0]} | {book[1]} | {book[2]}"
+
+        # insert the combined string with the corresponding color
+        book_list.insert(tk.END, book_info)
+        book_list.itemconfigure(tk.END, fg=color)
+
 
 #creates the "Show All Books" button
 show_all_button = tk.Button(root, text="Show All Books", command=show_all_books)
@@ -99,20 +140,36 @@ show_all_button.config(bg='#FFA500')
 
 
 def sort_by_status():
-    #this basically looks at the status that its on and shows that in the listbox
+    # gets the selected status from the Combobox widget
     status = status_entry.get()
 
-    #clears the listbox
+    # clears the listbox
     book_list.delete(0, tk.END)
 
-    #retrieves all rows from the books table with the specified status
+    # retrieves all rows from the books table with the specified status
     cursor.execute('''SELECT title, author, status FROM books WHERE status=?''', (status,))
     books = cursor.fetchall()
 
-    #inserts the rows into the listbox
-    for book in books:
-        book_list.insert(tk.END, f"{book[0]} | {book[1]} | {book[2]}")
+    # sorts the list of books by status
+    books.sort(key=lambda book: book[2])
 
+    # inserts the rows into the listbox with the corresponding color
+    for book in books:
+        if book[2] == 'Read':
+            color = 'green'
+        elif book[2] == 'Actively Reading':
+            color = 'orange'
+        elif book[2] == 'Reading':
+            color = 'blue'
+        else:
+            color = 'red'
+
+        # combine the title, author and status strings with the separators
+        book_info = f"{book[0]} | {book[1]} | {book[2]}"
+
+        # insert the combined string with the corresponding color
+        book_list.insert(tk.END, book_info)
+        book_list.itemconfigure(tk.END, fg=color)
 
 def edit_book(event):
     #gets the selected book from the listbox
@@ -211,9 +268,19 @@ delete_button.grid(row=1, column=4)
 sort_button = tk.Button(root, text='Sort By Status', command=sort_by_status, font=('Georgia', 14), bg='lightblue')
 sort_button.grid(row=2, column=4)
 
-#creates the listbox
+# creates the listbox
 book_list = tk.Listbox(root, height=12, width=40, font=('Georgia', 14))
-book_list.grid(row=3, column=0, columnspan=5)
+book_list.grid(row=3, column=0, columnspan=4, padx=10, pady=10, sticky='nsew')
+
+# create the scrollbar
+scrollbar = ttk.Scrollbar(root, orient='vertical', command=book_list.yview)
+
+# attach the scrollbar to the listbox
+book_list.config(yscrollcommand=scrollbar.set)
+
+# add the listbox and scrollbar to the window
+book_list.grid(row=3, column=0, columnspan=3, padx=10, pady=10, sticky='nsew')
+scrollbar.grid(row=3, column=3, sticky='ns')
 
 #binds the double-click event to the edit_book function
 book_list.bind('<Double-1>', edit_book)
